@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block display %}
+    <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-4 bg-success">
+            <h3 class="text-center">Add Todo</h3>
+        </div>
+        <div class="col-md-8 bg-warning">
+            <h3 class="text-center">Todo List</h3>
+        </div>
+    </div>
+    <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-4 bg-success">
+            <div class="tb-size text-center">
+                <form class="form-inline" action="/add" method="POST">
+                    <div class="form-group">
+                        <label class="sr-only" for="todoInput">Todo</label>
+                        <div class="input-group">
+                            <div class="input-group-addon">Todo</div>
+                            {{ form.content(class="form-control", id="todoInput", placeholder="Add Todo") }}
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                        {% for error in form.errors.content  %}
+                            <!-- <div class="er">{{ error }}</div> -->
+                            <span id="helpBlock" class="help-block"><strong>Error!</strong>{{error}}</span>
+                        {% endfor %}
+                </form>
+            </div>
+        </div>
+        <div class="col-md-8 bg-warning">
+            <div class="tb-size">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>content</th>
+                            <th>status</th>
+                            <th>time</th>
+                            <th>operate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for todo in todos %}
+                            <tr>
+                                <td>
+                                    {{ todo.content }}
+                                </td>
+                                <td>
+                                    {% if todo.status %}
+                                        已完成
+                                    {% else %}
+                                        未完成
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {{ todo.time.strftime('%H:%M %d-%m-%Y') }}
+                                </td>
+                                <td>
+                                    {% if todo.status %}
+                                        <a class="btn btn-primary" href="/done/{{ todo.id }}" role="button">Undone</a>
+                                    {% else %}
+                                        <a class="btn btn-primary" href="/done/{{ todo.id }}" role="button">Done</a>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <a class="btn btn-danger" href="/delete/{{ todo.id }}" role="button">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
